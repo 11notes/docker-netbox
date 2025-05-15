@@ -1,0 +1,82 @@
+name: "netbox"
+services:
+  postgres:
+    image: "11notes/postgres:16"
+    read_only: true
+    environment:
+      TZ: "Europe/Zurich"
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - "postgres.etc:/postgres/etc"
+      - "postgres.var:/postgres/var"
+      - "postgres.cmd:/run/cmd"
+    tmpfs:
+      - "/run/postgresql:uid=1000,gid=1000"
+      - "/postgres/log:uid=1000,gid=1000"
+    networks:
+      backend:
+    restart: "always"
+
+  cron:
+    depends_on:
+      postgres:
+        condition: "service_healthy"
+        restart: true
+    image: "11notes/cron:4.6"
+    environment:
+      TZ: "Europe/Zurich"
+      CRONTAB: |-
+        0 3 * * * cmd-socket '{"bin":"backup"}' > /proc/1/fd/1
+    volumes:
+      - "postgres.cmd:/run/cmd"
+    restart: "always"
+
+  redis:
+    image: "11notes/redis:7.4.2"
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      TZ: "Europe/Zurich"
+    volumes:
+      - "redis.etc:/redis/etc"
+      - "redis.var:/redis/var"
+    networks:
+      backend:
+    restart: always
+
+  app:
+    depends_on:
+      postgres:
+        condition: "service_healthy"
+        restart: true
+      redis:
+        condition: "service_healthy"
+        restart: true
+    image: "11notes/netbox:4.3.0"
+    environment:
+      TZ: "Europe/Zurich"
+      NETBOX_ADMIN_PASSWORD: ${NETBOX_ADMIN_PASSWORD}
+    volumes:
+      - "etc:/netbox/etc"
+      - "var:/netbox/var"
+    tmpfs:
+      - "/run:uid=1000,gid=1000"
+    ports:
+      - "3000:3000/tcp"
+    networks:
+      frontend:
+      backend:
+    restart: "always"
+
+volumes:
+  etc:
+  var:
+  postgres.etc:
+  postgres.var:
+  postgres.cmd:
+  redis.etc:
+  redis.var:
+
+networks:
+  frontend:
+  backend:
+    internal: true

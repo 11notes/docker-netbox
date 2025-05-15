@@ -1,0 +1,22 @@
+{
+  "image":"11notes/netbox",
+  "name":"netbox",
+  "root":"/netbox",
+  
+  "semver":{
+    "version":"4.3.0"
+  },
+
+  "readme":{
+    "description":"Run NetBox smaller, lightweight and more secure than ever",
+    "parent":{
+      "image":"11notes/alpine:stable"
+    },
+    "built":{
+      "netbox":"https://github.com/netbox-community/netbox"
+    },
+    "comparison": {
+      "image": "netboxcommunity/netbox:v4.3.0"
+    }
+  }
+}
