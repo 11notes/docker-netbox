@@ -51,7 +51,7 @@ services:
       redis:
         condition: "service_healthy"
         restart: true
-    image: "11notes/netbox:4.3.0"
+    image: "11notes/netbox:4.3.3"
     environment:
       TZ: "Europe/Zurich"
       NETBOX_ADMIN_PASSWORD: ${NETBOX_ADMIN_PASSWORD}

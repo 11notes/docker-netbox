@@ -1,7 +1,7 @@
 ![banner](https://github.com/11notes/defaults/blob/main/static/img/banner.png?raw=true)
 
 # NETBOX
-![size](https://img.shields.io/docker/image-size/11notes/netbox/4.3.2?color=0eb305)![5px](https://github.com/11notes/defaults/blob/main/static/img/transparent5x2px.png?raw=true)![version](https://img.shields.io/docker/v/11notes/netbox/4.3.2?color=eb7a09)![5px](https://github.com/11notes/defaults/blob/main/static/img/transparent5x2px.png?raw=true)![pulls](https://img.shields.io/docker/pulls/11notes/netbox?color=2b75d6)![5px](https://github.com/11notes/defaults/blob/main/static/img/transparent5x2px.png?raw=true)[<img src="https://img.shields.io/github/issues/11notes/docker-NETBOX?color=7842f5">](https://github.com/11notes/docker-NETBOX/issues)![5px](https://github.com/11notes/defaults/blob/main/static/img/transparent5x2px.png?raw=true)![swiss_made](https://img.shields.io/badge/Swiss_Made-FFFFFF?labelColor=FF0000&logo=data:image/svg%2bxml;base64,PHN2ZyB2ZXJzaW9uPSIxIiB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgdmlld0JveD0iMCAwIDMyIDMyIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgogIDxyZWN0IHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgZmlsbD0idHJhbnNwYXJlbnQiLz4KICA8cGF0aCBkPSJtMTMgNmg2djdoN3Y2aC03djdoLTZ2LTdoLTd2LTZoN3oiIGZpbGw9IiNmZmYiLz4KPC9zdmc+)
+![size](https://img.shields.io/docker/image-size/11notes/netbox/4.3.3?color=0eb305)![5px](https://github.com/11notes/defaults/blob/main/static/img/transparent5x2px.png?raw=true)![version](https://img.shields.io/docker/v/11notes/netbox/4.3.3?color=eb7a09)![5px](https://github.com/11notes/defaults/blob/main/static/img/transparent5x2px.png?raw=true)![pulls](https://img.shields.io/docker/pulls/11notes/netbox?color=2b75d6)![5px](https://github.com/11notes/defaults/blob/main/static/img/transparent5x2px.png?raw=true)[<img src="https://img.shields.io/github/issues/11notes/docker-NETBOX?color=7842f5">](https://github.com/11notes/docker-NETBOX/issues)![5px](https://github.com/11notes/defaults/blob/main/static/img/transparent5x2px.png?raw=true)![swiss_made](https://img.shields.io/badge/Swiss_Made-FFFFFF?labelColor=FF0000&logo=data:image/svg%2bxml;base64,PHN2ZyB2ZXJzaW9uPSIxIiB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgdmlld0JveD0iMCAwIDMyIDMyIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgogIDxyZWN0IHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgZmlsbD0idHJhbnNwYXJlbnQiLz4KICA8cGF0aCBkPSJtMTMgNmg2djdoN3Y2aC03djdoLTZ2LTdoLTd2LTZoN3oiIGZpbGw9IiNmZmYiLz4KPC9zdmc+)
 
 Run NetBox smaller, lightweight and more secure than ever
 
@@ -23,9 +23,9 @@ If you value security, simplicity and the ability to interact with the maintaine
 # COMPARISON 🏁
 Below you find a comparison between this image and the most used or original one.
 
-| **image** | 11notes/netbox:4.3.2 | netboxcommunity/netbox:v4.3.2 |
+| **image** | 11notes/netbox:4.3.3 | netboxcommunity/netbox:v4.3.3 |
 | ---: | :---: | :---: |
-| **image size on disk** | 518MB | 697MB |
+| **image size on disk** | 538MB | 702MB |
 | **process UID/GID** | 1000/1000 | 0/0 |
 | **distroless?** | ❌ | ❌ |
 | **rootless?** | ✅ | ❌ |
@@ -90,7 +90,7 @@ services:
       redis:
         condition: "service_healthy"
         restart: true
-    image: "11notes/netbox:4.3.0"
+    image: "11notes/netbox:4.3.3"
     environment:
       TZ: "Europe/Zurich"
       NETBOX_ADMIN_PASSWORD: ${NETBOX_ADMIN_PASSWORD}
@@ -138,18 +138,18 @@ networks:
 # MAIN TAGS 🏷️
 These are the main tags for the image. There is also a tag for each commit and its shorthand sha256 value.
 
-* [4.3.2](https://hub.docker.com/r/11notes/netbox/tags?name=4.3.2)
+* [4.3.3](https://hub.docker.com/r/11notes/netbox/tags?name=4.3.3)
 
 ### There is no latest tag, what am I supposed to do about updates?
-It is of my opinion that the ```:latest``` tag is super dangerous. Many times, I’ve introduced **breaking** changes to my images. This would have messed up everything for some people. If you don’t want to change the tag to the latest [semver](https://semver.org/), simply use the short versions of [semver](https://semver.org/). Instead of using ```:4.3.2``` you can use ```:4``` or ```:4.3```. Since on each new version these tags are updated to the latest version of the software, using them is identical to using ```:latest``` but at least fixed to a major or minor version.
+It is of my opinion that the ```:latest``` tag is dangerous. Many times, I’ve introduced **breaking** changes to my images. This would have messed up everything for some people. If you don’t want to change the tag to the latest [semver](https://semver.org/), simply use the short versions of [semver](https://semver.org/). Instead of using ```:4.3.3``` you can use ```:4``` or ```:4.3```. Since on each new version these tags are updated to the latest version of the software, using them is identical to using ```:latest``` but at least fixed to a major or minor version.
 
 If you still insist on having the bleeding edge release of this app, simply use the ```:rolling``` tag, but be warned! You will get the latest version of the app instantly, regardless of breaking changes or security issues or what so ever. You do this at your own risk!
 
 # REGISTRIES ☁️
 ```
-docker pull 11notes/netbox:4.3.2
-docker pull ghcr.io/11notes/netbox:4.3.2
-docker pull quay.io/11notes/netbox:4.3.2
+docker pull 11notes/netbox:4.3.3
+docker pull ghcr.io/11notes/netbox:4.3.3
+docker pull quay.io/11notes/netbox:4.3.3
 ```
 
 # SOURCE 💾
@@ -170,4 +170,4 @@ docker pull quay.io/11notes/netbox:4.3.2
 # ElevenNotes™️
 This image is provided to you at your own risk. Always make backups before updating an image to a different version. Check the [releases](https://github.com/11notes/docker-netbox/releases) for breaking changes. If you have any problems with using this image simply raise an [issue](https://github.com/11notes/docker-netbox/issues), thanks. If you have a question or inputs please create a new [discussion](https://github.com/11notes/docker-netbox/discussions) instead of an issue. You can find all my other repositories on [github](https://github.com/11notes?tab=repositories).
 
-*created 06.06.2025, 08:28:28 (CET)*
+*created 27.06.2025, 08:20:32 (CET)*
