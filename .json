@@ -3,7 +3,7 @@
   "name": "netbox",
   "root": "/netbox",
   "semver": {
-    "version": "4.3.2"
+    "version": "4.3.3"
   },
   "readme": {
     "description": "Run NetBox smaller, lightweight and more secure than ever",
@@ -14,7 +14,7 @@
       "netbox": "https://github.com/netbox-community/netbox"
     },
     "comparison": {
-      "image": "netboxcommunity/netbox:v4.3.2"
+      "image": "netboxcommunity/netbox:v4.3.3"
     }
   }
 }
