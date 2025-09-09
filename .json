@@ -16,5 +16,8 @@
     "comparison": {
       "image": "netboxcommunity/netbox:v4.3.7"
     }
+  },
+  "grype":{
+    "severity":"critical"
   }
 }
