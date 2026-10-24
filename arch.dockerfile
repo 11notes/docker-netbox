@@ -20,15 +20,12 @@ ARG APP_GID=1000
     sed -i -e 's/django-storages/django-storages\[azure,boto3,dropbox,google,libcloud,sftp\]/g' requirements.txt; \
     cat /netbox-docker/requirements-container.txt >> /opt/netbox/requirements.txt;
 
-  FROM python:3.12-alpine AS build
+  FROM 11notes/alpine:stable AS build
   COPY --from=netbox /opt/netbox /opt/netbox
-  ARG APP_VERSION \
-      TARGETARCH
+  USER root
 
   RUN set -ex; \
     apk add --no-cache --upgrade \
-      wget \
-      curl \
       build-base \
       cargo \
       jpeg-dev \
@@ -37,29 +34,15 @@ ARG APP_GID=1000
       libxml2-dev \
       openldap-dev \
       openssl-dev \
+      pkgconf \
       postgresql-dev \
+      py3-pip \
       python3-dev \
+      xmlsec-dev \
       zlib-dev;
 
   RUN set -ex; \
-    mkdir -p /root/.cache/pip; \
-    case "${TARGETARCH}" in \
-      "amd64") \
-        wget https://github.com/xmlsec/python-xmlsec/releases/download/1.3.14/xmlsec-1.3.14-cp312-cp312-musllinux_1_1_x86_64.whl -O /root/.cache/pip/xmlsec-1.3.14-cp312-cp312-musllinux_1_1_x86_64.whl ; \
-      ;; \
-      "arm64") \
-        wget https://github.com/xmlsec/python-xmlsec/releases/download/1.3.14/xmlsec-1.3.14-cp312-cp312-musllinux_1_1_aarch64.whl -O /root/.cache/pip/xmlsec-1.3.14-cp312-cp312-musllinux_1_1_aarch64.whl; \
-      ;; \
-    esac; \
-    pip3 install lxml --no-binary=lxml --break-system-packages; \
-    find / -name xmlsec-*.whl -exec pip3 install {} \;;
-  
-  RUN set -ex; \
-    pip3 install -r /opt/netbox/requirements.txt --break-system-packages;
-
-  RUN set -ex; \
-    mkdir -p /opt/whl; \
-    find /root/.cache/pip -name "*.whl" -exec cp {} /opt/whl \;;
+    pip3 install -r /opt/netbox/requirements.txt --prefix=/install --ignore-installed --break-system-packages;
 
 # :: Header
   FROM 11notes/alpine:stable
@@ -92,8 +75,7 @@ ARG APP_GID=1000
   # :: multi-stage
     COPY --from=util /usr/local/bin /usr/local/bin
     COPY --from=netbox /opt/netbox /opt
-    COPY --from=netbox /opt/netbox/requirements.txt /opt/netbox/requirements.txt
-    COPY --from=build /opt/whl/ /tmp
+    COPY --from=build /install /usr
 
 # :: Run
   USER root
@@ -105,6 +87,9 @@ ARG APP_GID=1000
         uwsgi \
         uwsgi-python \
         libldap \
+        libxml2 \
+        libxslt \
+        xmlsec \
         postgresql-client \
         python3 \
         py3-packaging;
@@ -113,16 +98,6 @@ ARG APP_GID=1000
       eleven mkdir ${APP_ROOT}/{etc,var}; \
       eleven mkdir ${APP_ROOT}/var/{reports,media,scripts}; \
       ln -sf ${APP_ROOT}/etc/config.py ${APP_OPT_ROOT}/configuration.py;
-
-    RUN set -ex; \
-      apk --no-cache --update --virtual .setup add \
-        py3-pip; \
-      find /tmp -name "*.whl" -exec pip3 install {} ";"; \
-      pip3 install \
-        -r /opt/netbox/requirements.txt; \
-      apk del --no-network .setup; \
-      rm -rf /usr/lib/python3.12/site-packages/pip; \
-      rm -rf /tmp/*;
 
     COPY ./rootfs /
     RUN set -ex; \
