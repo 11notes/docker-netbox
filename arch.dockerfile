@@ -88,7 +88,8 @@
     chmod +x -R /usr/local/bin; \
     chown -R ${APP_UID}:${APP_GID} \
       /opt/netbox \
-      ${APP_ROOT}; \
+      ${APP_ROOT};
+
 
 # ╔═════════════════════════════════════════════════════╗
 # ║                       IMAGE                         ║
