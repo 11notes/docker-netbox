@@ -1,49 +1,47 @@
 name: "netbox"
+
+x-lockdown: &lockdown
+  # prevents write access to the image itself
+  read_only: true
+  # prevents any process within the container to gain more privileges
+  security_opt:
+    - "no-new-privileges=true"
+
 services:
   postgres:
-    image: "11notes/postgres:16"
-    read_only: true
+    image: "11notes/postgres:18"
+    <<: *lockdown
     environment:
       TZ: "Europe/Zurich"
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "5432:5432/tcp"
+    networks:
+      frontend:
     volumes:
       - "postgres.etc:/postgres/etc"
       - "postgres.var:/postgres/var"
-      - "postgres.cmd:/run/cmd"
     tmpfs:
-      - "/run/postgresql:uid=1000,gid=1000"
+      - "/postgres/run:uid=1000,gid=1000"
       - "/postgres/log:uid=1000,gid=1000"
-    networks:
-      backend:
-    restart: "always"
-
-  cron:
-    depends_on:
-      postgres:
-        condition: "service_healthy"
-        restart: true
-    image: "11notes/cron:4.6"
-    environment:
-      TZ: "Europe/Zurich"
-      CRONTAB: |-
-        0 3 * * * cmd-socket '{"bin":"backup"}' > /proc/1/fd/1
-    volumes:
-      - "postgres.cmd:/run/cmd"
     restart: "always"
 
   redis:
-    image: "11notes/redis:7.4.2"
+    image: "11notes/redis:8"
+    <<: *lockdown
     environment:
-      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      REDIS_PASSWORD: "${REDIS_PASSWORD}"
       TZ: "Europe/Zurich"
+    networks:
+      backend:
     volumes:
       - "redis.etc:/redis/etc"
       - "redis.var:/redis/var"
-    networks:
-      backend:
-    restart: always
+    tmpfs:
+      - "/run:uid=1000,gid=1000"
+    restart: "always"
 
-  app:
+  netbox:
     depends_on:
       postgres:
         condition: "service_healthy"
@@ -51,9 +49,15 @@ services:
       redis:
         condition: "service_healthy"
         restart: true
-    image: "11notes/netbox:4.3.3"
+    image: "11notes/netbox:4.7.4"
+    <<: *lockdown
     environment:
       TZ: "Europe/Zurich"
+      DB_PASSWORD: "${POSTGRES_PASSWORD}"
+      REDIS_PASSWORD: "${REDIS_PASSWORD}"
+      SECRET_KEY: "${SECRET_KEY}"
+      API_TOKEN_PEPPER_1: "${API_TOKEN_PEPPER}"
+      NETBOX_ADMIN: "admin"
       NETBOX_ADMIN_PASSWORD: ${NETBOX_ADMIN_PASSWORD}
     volumes:
       - "etc:/netbox/etc"
@@ -61,7 +65,7 @@ services:
     tmpfs:
       - "/run:uid=1000,gid=1000"
     ports:
-      - "3000:3000/tcp"
+      - "3000:8080/tcp"
     networks:
       frontend:
       backend:
@@ -72,7 +76,6 @@ volumes:
   var:
   postgres.etc:
   postgres.var:
-  postgres.cmd:
   redis.etc:
   redis.var:
 

@@ -2,11 +2,6 @@
   if [ -z "${1}" ]; then
     cd /opt/netbox
 
-    if cat /opt/netbox/netbox/configuration.py | grep -q "SECRET_KEY = False"; then
-      sed -i 's/SECRET_KEY = False/SECRET_KEY = '\'$(eleven randomString 51)\''/' /netbox/etc/config.py
-      eleven log warning "no secret key was set, generating random secret key and adding to config"
-    fi
-
     if ! ./manage.py migrate --check >/dev/null 2>&1; then
       eleven log info "updating database ..."
       ./manage.py migrate --no-input
@@ -16,9 +11,23 @@
 
     ash /usr/local/bin/superuser.sh
 
-    set -- "uwsgi" \
-      uwsgi.ini
-    
+    export GRANIAN_PORT=${GRANIAN_PORT:-8080}
+    export GRANIAN_WORKERS=${GRANIAN_WORKERS:-4}
+
+    set -- granian \
+      --host "::" \
+      --interface "wsgi" \
+      --no-ws \
+      --respawn-failed-workers \
+      --loop "uvloop" \
+      --log \
+      --log-level "warning" \
+      --working-dir "/opt/netbox" \
+      --static-path-route "/static" \
+      --static-path-mount "/opt/netbox/static/" \
+      --static-path-dir-to-file index.html \
+      "netbox.granian:application"
+
     eleven log start
   fi
 

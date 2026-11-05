@@ -1,13 +1,15 @@
-${{ content_synopsis }} This image will give you a rootless and lightweight NetBox installation. NetBox exists to empower network engineers. Since its release in 2016, it has become the go-to solution for modeling and documenting network infrastructure for thousands of organizations worldwide. As a successor to legacy IPAM and DCIM applications, NetBox provides a cohesive, extensive, and accessible data model for all things networked. By providing a single robust user interface and programmable APIs for everything from cable maps to device configurations, NetBox serves as the central source of truth for the modern network.
+${{ content_synopsis }} This image will give you a [rootless](https://github.com/11notes/RTFM/blob/main/linux/container/image/rootless.md) Netbox installation.
 
-${{ content_uvp }} Good question! All the other images on the market that do exactly the same don’t do or offer these options:
+${{ content_uvp }} Good question! Because ...
 
 ${{ github:> [!IMPORTANT] }}
-${{ github:> }}* This image runs as 1000:1000 by default, most other images run everything as root
-${{ github:> }}* This image is created via a secure, pinned CI/CD process and immune to upstream attacks, most other images have upstream dependencies that can be exploited
-${{ github:> }}* This image contains a proper health check that verifies the app is actually working, most other images have either no health check or only check if a port is open or ping works
-${{ github:> }}* This repository has an auto update feature that will automatically build the latest version if released, most other providers don't do this
-${{ github:> }}* This image is smaller than most other images
+${{ github:> }}* ... this image runs [rootless](https://github.com/11notes/RTFM/blob/main/linux/container/image/rootless.md) as 1000:1000
+${{ github:> }}* ... this image is auto updated to the latest version via CI/CD
+${{ github:> }}* ... this image is built and compiled from source
+${{ github:> }}* ... this image has a health check
+${{ github:> }}* ... this image runs read-only
+${{ github:> }}* ... this image is automatically scanned for CVEs before and after publishing
+${{ github:> }}* ... this image is created via a secure and pinned CI/CD process
 
 If you value security, simplicity and the ability to interact with the maintainer and developer of an image. Using my images is a great start in that direction.
 
