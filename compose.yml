@@ -49,7 +49,7 @@ services:
       redis:
         condition: "service_healthy"
         restart: true
-    image: "11notes/netbox:4.7.4"
+    image: "11notes/netbox:4.7.5"
     <<: *lockdown
     environment:
       TZ: "Europe/Zurich"
