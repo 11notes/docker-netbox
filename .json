@@ -3,7 +3,7 @@
   "name": "netbox",
   "root": "/netbox",
   "semver": {
-    "version": "4.7.4"
+    "version": "4.7.5"
   },
   "readme": {
     "description": "run netbox rootless",
@@ -17,8 +17,8 @@
       "image": "netboxcommunity/netbox:v4.7.4"
     }
   },
-  "grype":{
-    "severity":"critical"
+  "grype": {
+    "severity": "critical"
   },
   "unraid": true,
   "nobody": true
