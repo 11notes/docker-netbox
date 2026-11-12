@@ -4,7 +4,7 @@
 # GLOBAL
   ARG APP_UID=1000 \
       APP_GID=1000 \
-      APP_PYTHON_VERSION=0.0
+      APP_PYTHON_MAJOR_MINOR_VERSION=0.0
 
 # :: FOREIGN IMAGES
   FROM 11notes/util AS util
@@ -41,7 +41,7 @@
     cp /netbox-docker/docker/granian.py /opt/netbox/netbox/netbox/granian.py;
 
 # :: NETBOX
-  FROM 11notes/python:${APP_PYTHON_VERSION} AS build
+  FROM 11notes/python:${APP_PYTHON_MAJOR_MINOR_VERSION} AS build
   USER root
   ARG APP_UID \
       APP_GID \
