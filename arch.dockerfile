@@ -95,7 +95,7 @@
 # ║                       IMAGE                         ║
 # ╚═════════════════════════════════════════════════════╝
 # :: HEADER
-  FROM 11notes/alpine:stable
+  FROM scratch
 
   # :: default arguments
     ARG TARGETPLATFORM \
